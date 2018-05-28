@@ -319,16 +319,6 @@ public class Main {
 
 	}
 
-	/*public static void HienThiChiTietKhuVuc() {
-		System.out.println("Nhap ma khu vuc:");
-		String maKhuVuc = sc.nextLine();
-		KhuVuc khuVuc = new KhuVuc(maKhuVuc);
-		System.out.println("-------- KHU VUC " + maKhuVuc + "----------");
-		System.out.printf("%-10s|%-20s|%-10s|%-20s|%-10s", "maKhuVuc", "tenKhuVuc", "tenKhuVuc", "matHangLuuTru",
-				"soLuong");
-		System.out.println("\n" + khuVuc.XuatThongTinKhuVuc());
-
-	}*/
 
 	
 }
