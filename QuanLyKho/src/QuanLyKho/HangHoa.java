@@ -7,7 +7,15 @@ public class HangHoa {
 	protected String maHang;
 	protected String tenHang;
 	protected double giaTien;
-	private int soLuong;
+	protected int soLuong;
+	protected double dienTich;
+	
+	public double getDienTich() {
+		return dienTich;
+	}
+	public void setDienTich(double dienTich) {
+		this.dienTich = dienTich;
+	}
 	public int getSoLuong() {
 		return soLuong;
 	}
@@ -15,14 +23,6 @@ public class HangHoa {
 		this.soLuong = soLuong;
 	}
 
-	private String maKhuVuc;
-	
-	public String getMaKhuVuc() {
-		return maKhuVuc;
-	}
-	public void setMaKhuVuc(String maKhuVuc) {
-		this.maKhuVuc = maKhuVuc;
-	}
 	public String getMaHang() {
 		return maHang;
 	}
@@ -52,24 +52,22 @@ public class HangHoa {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public HangHoa(String maKhuVuc) {
-		this.maKhuVuc = maKhuVuc;
-	}
-	
 	public void NhapThongTinHangHoa(){
 		Scanner sc = new Scanner(System.in);
 		
 		System.out.println("Nhap ma hang: ");
 		maHang = sc.nextLine();
 		
-		System.out.println("Nhap ten hang: ");
-		tenHang = sc.nextLine();
-		
 		System.out.println("Nhap gia tien: ");
 		giaTien = sc.nextDouble();
 		
 		System.out.println("Nhap so Luong: ");
 		soLuong = sc.nextInt();
+		
+	}
+	
+	public double getTongDienTichHangNhapVao(){
+		return dienTich * soLuong;
 	}
 	
 	public String XuatThongTinHangHoa(){

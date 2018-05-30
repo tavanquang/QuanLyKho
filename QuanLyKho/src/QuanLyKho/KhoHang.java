@@ -1,5 +1,7 @@
 package QuanLyKho;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class KhoHang {
@@ -9,6 +11,25 @@ public class KhoHang {
 	private int chieuRong;
 	private int soKhuVuc;
 	private double dienTich;
+	
+	List<KhuVuc> KhuVucs = new ArrayList<KhuVuc>();
+	List<HoaDon> HoaDons = new ArrayList<HoaDon>();
+
+	public List<KhuVuc> getKhuVucs() {
+		return KhuVucs;
+	}
+
+	public void setKhuVucs(List<KhuVuc> khuVucs) {
+		KhuVucs = khuVucs;
+	}
+
+	public List<HoaDon> getHoaDons() {
+		return HoaDons;
+	}
+
+	public void setHoaDons(List<HoaDon> hoaDons) {
+		HoaDons = hoaDons;
+	}
 
 	public String getMaKho() {
 		return maKho;

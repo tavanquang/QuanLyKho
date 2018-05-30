@@ -7,31 +7,32 @@ import java.util.Scanner;
 public class Main {
 
 	private static List<KhoHang> listKhoHang = new ArrayList<KhoHang>();
-	private static List<KhuVuc> listKhuVuc = new ArrayList<KhuVuc>();
+	// private static List<KhuVuc> listKhuVuc = new ArrayList<KhuVuc>();
 
-	private static List<CPU> listCPU = new ArrayList<CPU>();
-	private static List<BanPhim> listBanPhim = new ArrayList<BanPhim>();
-	private static List<Chuot> listChuot = new ArrayList<Chuot>();
-	private static List<ManHinh> listManHinh = new ArrayList<ManHinh>();
-
-	private static List<HoaDon> listHoaDon = new ArrayList<HoaDon>();
+	/*
+	 * private static List<CPU> listCPU = new ArrayList<CPU>(); private static
+	 * List<BanPhim> listBanPhim = new ArrayList<BanPhim>(); private static
+	 * List<Chuot> listChuot = new ArrayList<Chuot>(); private static
+	 * List<ManHinh> listManHinh = new ArrayList<ManHinh>();
+	 */
 
 	private static Scanner sc = new Scanner(System.in);
 
 	public static void main(String[] args) {
 
 		int luaChon = 0;
-		
+
 		boolean flag = true;
 		do {
 			System.out.println("--------- MENU --------");
 			System.out.println("1. Them kho hang");
 			System.out.println("2. Hien thi danh sach kho hang");
-			System.out.println("3. Xem thong tin kho hang");
-			System.out.println("4. Nhap hang");
-			System.out.println("5. Xuat hang");
-			System.out.println("6. Thong tin so luong hang trong kho");
-			System.out.println("7. Thoat chuong trinh ! ");
+			System.out.println("3. Them khu vuc");
+			System.out.println("4. Hien thi danh sach khu vuc");
+			System.out.println("5. Them hang");
+			System.out.println("6. Xuat Hang");
+			System.out.println("7. So luong hang trong kho con bao nhieu ! ");
+			System.out.println("8. Thoat chuong trinh ! ");
 			System.out.println("--> Moi ban lua chon ? ");
 			try {
 
@@ -42,24 +43,22 @@ public class Main {
 					break;
 				case 2:
 					HienThiDanhSachKhoHang();
-					XemMotKhoHang();
 					break;
 				case 3:
-					HienThiDanhSachKhoHang();
-					ThongTinKhuVucTrongMotKho();
+					ThemKhuVuc();
 					break;
 				case 4:
-					HienThiDanhSachKhoHang();
-					XemMotKhoHang();
-					NhapHang();
+					HienThiDSKhuVuc();
 					break;
 				case 5:
-					XuatHang();
+					ThemHangHoa();
 					break;
-				case 6:
-					ThongTinSoLuongHangTrongKho();
+				case 6:XuatHang();
 					break;
-				case 7:
+				case 7:	QuanLyTonKho();
+					break;
+				
+				case 8:
 				default:
 					flag = false;
 					System.out.println("Dung chuong trinh !");
@@ -73,25 +72,11 @@ public class Main {
 		} while (flag == true);
 
 	}
-	
+
 	public static void NhapThongTinKhoHang() {
 		KhoHang khoHang = new KhoHang();
 		khoHang.NhapThongTinKhoHang();
-		if (listKhoHang.contains(khoHang)) {
-			System.out.println("Ma kho dang ton tai, vui long nhap lai ");
-		} else {
-			listKhoHang.add(khoHang);
-
-			for (int i = 0; i < khoHang.getSoKhuVuc(); i++) {
-				System.out.println("Nhap thong tin khu vuc " + (i + 1) + ":");
-				KhuVuc khuVuc = new KhuVuc();
-				khuVuc.NhapThongTinhKhuVuc();
-				listKhuVuc.add(khuVuc);
-				khuVuc.setDienTich(khoHang.getDienTich() / khoHang.getSoKhuVuc());
-				khuVuc.setMaKho(khoHang.getMaKho());
-			}
-		}
-
+		listKhoHang.add(khoHang);
 	}
 
 	public static void HienThiDanhSachKhoHang() {
@@ -104,202 +89,371 @@ public class Main {
 		System.out.println("------------------------------------------------------");
 	}
 
-	public static void XemMotKhoHang() {
-		boolean flag = false;
-		System.out.println("\n============BAN CHON KHO HANG CAN XEM ===========");
-		System.out.println("Nhap ma kho: ");
+	public static void ThemKhuVuc() {
+		HienThiDanhSachKhoHang();
+
+		System.out.println("--> Chon kho hang de them: ");
 		sc.nextLine();
 		String maKho = sc.nextLine();
+		List<KhuVuc> listKhuVuc = new ArrayList<>();
+		for (KhoHang kh : listKhoHang) {
+			if (kh.getMaKho().equalsIgnoreCase(maKho)) {
+				int soKhu = kh.getSoKhuVuc();
+				if (soKhu == kh.getKhuVucs().size()) {
+					System.out.println("Kho nay da nhap khu vuc roi: ");
+				} else {
+					for (int i = 0; i < soKhu; i++) {
 
-		for (KhuVuc khuVuc : listKhuVuc) {
-			if (khuVuc.getMaKho().equalsIgnoreCase(maKho)) {
-				flag = true;
-			}
-		}
+						KhuVuc kv = new KhuVuc();
+						System.out.println("Nhap thong tin khu vuc " + (i + 1) + ": ");
+						kv.NhapThongTinhKhuVuc();
+						kv.setDienTich(kh.getDienTich() / soKhu);
+						listKhuVuc.add(kv);
 
-		if (flag) {
-			System.out
-					.println("\n\n======================= THONG TIN KHO HANG " + maKho + " =========================");
-			System.out.printf("%-10s|%-20s|%-10s|%-20s|%-10s", "Ma Khu Vuc", "Ten Khu Vuc", "Dien Tich", "Mat Hang",
-					"So Luong Hien Co");
-			System.out.println("\n-----------------------------------------------------------------------------------");
-
-			for (KhuVuc khuVuc : listKhuVuc) {
-				if (khuVuc.getMaKho().equalsIgnoreCase(maKho)) {
-					System.out.println(khuVuc.XuatThongTinKhuVuc());
-					flag = true;
+					}
+					kh.setKhuVucs(listKhuVuc);
+					listKhoHang.set(listKhoHang.indexOf(kh), kh);
 				}
 			}
-			System.out.println("-----------------------------------------------------------------------------------");
+		}
+	}
+
+	public static void HienThiDSKhuVuc() {
+		HienThiDanhSachKhoHang();
+		System.out.println("--> Chon kho hang de hien thi: ");
+		sc.nextLine();
+		String maKho = sc.nextLine();
+		boolean flag = false;
+		for (KhoHang kh : listKhoHang) {
+			if (kh.getMaKho().equalsIgnoreCase(maKho)) {
+				for (KhuVuc khuvuc : kh.getKhuVucs()) {
+					flag = true;
+				}
+				if (flag) {
+					System.out.println(
+							"\n\n======================= THONG TIN KHO HANG " + maKho + " =========================");
+					System.out.printf("%-10s|%-20s|%-10s|%-20s|%-10s", "Ma Khu Vuc", "Ten Khu Vuc", "Dien Tich",
+							"Mat Hang", "So Luong Hien Co");
+					System.out.println(
+							"\n-----------------------------------------------------------------------------------");
+
+					for (KhuVuc khuvuc : kh.getKhuVucs()) {
+						System.out.println(khuvuc.XuatThongTinKhuVuc());
+						flag = true;
+					}
+					System.out.println(
+							"-----------------------------------------------------------------------------------");
+				} else {
+					System.out.println("Kho " + maKho + " chua tao khu vuc !");
+					flag = true;
+					break;
+				}
+			}
 		}
 		if (!flag) {
 			System.out.println("Ma kho " + maKho + "khong ton tai !");
 		}
 	}
 
-	public static void ThongTinKhuVucTrongMotKho() {
-
-		System.out.println("\n============ THONG TIN KHO HANG ===========");
-		System.out.println("Nhap ma kho: ");
+	public static void ThemHangHoa(){
+		HienThiDanhSachKhoHang();
+		System.out.println("--> Chon kho hang de hien thi: ");
 		sc.nextLine();
 		String maKho = sc.nextLine();
 		
-		int sokv = 0;
-		int soKVtrong = 0;
-		double dienTichConHienTai = 0;
-		double dienTichBanDau = 0;
-		for (KhoHang kho : listKhoHang) {
-			if (kho.getMaKho().equalsIgnoreCase(maKho)) {
-				dienTichBanDau = kho.getDienTich();
+		System.out.println(" --- DANH SACH HANG HOA ---");
+		System.out.println("1. MAN HINH");
+		System.out.println("2. BAN PHIM");
+		System.out.println("3. CPU");
+		System.out.println("4. CHUOT");
+		System.out.println("--> Nhap ten mat hang can them vao kho:");
+		String tenMH = "";
+		int luaChon = sc.nextInt();
+		
+		if(luaChon == 1){
+			tenMH = "MAN HINH";
+		}else if(luaChon == 2){
+			tenMH = "BAN PHIM";
+		}else if(luaChon == 3){
+			tenMH = "CPU";
+		}else if(luaChon == 4){
+			tenMH = "CHUOT";
+		}
+		
+		boolean flag = false;
+		for(KhoHang khohang : listKhoHang){
+			if(khohang.getMaKho().endsWith(maKho)){
+				for(KhuVuc khuvuc : khohang.getKhuVucs()){
+					if(khuvuc.getMatHangLuuTru().equalsIgnoreCase(tenMH)){
+						flag = true;
+						List<HangHoa> listHangHoa = new ArrayList<>();
+						if(tenMH.equalsIgnoreCase("MAN HINH")){
+							ManHinh ManHinh = new ManHinh();
+							ManHinh.NhapThongTinHangHoa();
+							ManHinh.setDienTich(0.3);
+							ManHinh.setTenHang(tenMH);
+	
+							double dientTichConTrongDeLuuHang = khuvuc.getDienTich()
+									- (khuvuc.getSoLuong() * ManHinh.getDienTich());
+							if (ManHinh.getTongDienTichHangNhapVao() > dientTichConTrongDeLuuHang) {
+								System.out.println("So Luong hang qua lon, khong the luu vao kho !");
+							} else {
+								listHangHoa.add(ManHinh);
+								khuvuc.setSoLuong(khuvuc.getSoLuong() + ManHinh.getSoLuong());
+								khuvuc.setHangHoas(listHangHoa);
+								khuvuc.setDienTich(dientTichConTrongDeLuuHang - ManHinh.getTongDienTichHangNhapVao());
+								
+								listKhoHang.set(listKhoHang.indexOf(khohang), khohang);
+								System.out.println("Nhap hang vao kho thanh cong !");
+							}
+						} else if(tenMH.equalsIgnoreCase("BAN PHIM")){
+							BanPhim BanPhim = new BanPhim();
+							BanPhim.NhapThongTinHangHoa();
+							BanPhim.setDienTich(0.2);
+							BanPhim.setTenHang(tenMH);
+	
+							double dientTichConTrongDeLuuHang = khuvuc.getDienTich()
+									- (khuvuc.getSoLuong() * BanPhim.getDienTich());
+							if (BanPhim.getTongDienTichHangNhapVao() > dientTichConTrongDeLuuHang) {
+								System.out.println("So Luong hang qua lon, khong the luu vao kho !");
+							} else {
+								listHangHoa.add(BanPhim);
+								khuvuc.setSoLuong(khuvuc.getSoLuong() + BanPhim.getSoLuong());
+								khuvuc.setHangHoas(listHangHoa);
+								khuvuc.setDienTich(dientTichConTrongDeLuuHang - BanPhim.getTongDienTichHangNhapVao());
+								
+								listKhoHang.set(listKhoHang.indexOf(khohang), khohang);
+								System.out.println("Nhap hang vao kho thanh cong !");
+							}
+							
+						}else if(tenMH.equalsIgnoreCase("CPU")){
+							CPU CPU = new CPU();
+							CPU.NhapThongTinHangHoa();
+							CPU.setDienTich(0.5);
+							CPU.setTenHang(tenMH);
+	
+							double dientTichConTrongDeLuuHang = khuvuc.getDienTich()
+									- (khuvuc.getSoLuong() * CPU.getDienTich());
+							if (CPU.getTongDienTichHangNhapVao() > dientTichConTrongDeLuuHang) {
+								System.out.println("So Luong hang qua lon, khong the luu vao kho !");
+							} else {
+								listHangHoa.add(CPU);
+								khuvuc.setSoLuong(khuvuc.getSoLuong() + CPU.getSoLuong());
+								khuvuc.setHangHoas(listHangHoa);
+								khuvuc.setDienTich(dientTichConTrongDeLuuHang - CPU.getTongDienTichHangNhapVao());
+								
+								listKhoHang.set(listKhoHang.indexOf(khohang), khohang);
+								System.out.println("Nhap hang vao kho thanh cong !");
+							}
+							
+						}else if(tenMH.equalsIgnoreCase("CHUOT")){
+							Chuot Chuot = new Chuot();
+							Chuot.NhapThongTinHangHoa();
+							Chuot.setDienTich(0.2);
+							Chuot.setTenHang(tenMH);
+	
+							double dientTichConTrongDeLuuHang = khuvuc.getDienTich()
+									- (khuvuc.getSoLuong() * Chuot.getDienTich());
+							if (Chuot.getTongDienTichHangNhapVao() > dientTichConTrongDeLuuHang) {
+								System.out.println("So Luong hang qua lon, khong the luu vao kho !");
+							} else {
+								listHangHoa.add(Chuot);
+								khuvuc.setSoLuong(khuvuc.getSoLuong() + Chuot.getSoLuong());
+								khuvuc.setHangHoas(listHangHoa);
+								khuvuc.setDienTich(dientTichConTrongDeLuuHang - Chuot.getTongDienTichHangNhapVao());
+								
+								listKhoHang.set(listKhoHang.indexOf(khohang), khohang);
+								System.out.println("Nhap hang vao kho thanh cong !");
+							}
+							
+						}
+					}
+				}
+				if(!flag){
+					System.out.println("Mat hang ban chon khong co trong kho !");
+				}
 			}
 		}
-		double khVucCPU = 0;
-		double khVucCHUOT = 0;
-		double khVucBANPHIM = 0;
-		double khVucMANHINH = 0;
-		for (KhuVuc kh : listKhuVuc) {
-			if (kh.getMaKho().equalsIgnoreCase(maKho)) {
-				sokv++;
-				if (kh.getSoLuong() == 0) {
-					soKVtrong++;
-				}
-
-				String tenMatHang = kh.getMatHangLuuTru();
-
-				if (tenMatHang.equalsIgnoreCase("CPU")) {
-					khVucCPU += 1;
-				} else if (tenMatHang.equalsIgnoreCase("CHUOT")) {
-					khVucCHUOT += 0.1;
-				} else if (tenMatHang.equalsIgnoreCase("BAN PHIM")) {
-					khVucBANPHIM += 0.3;
-				} else if (tenMatHang.equalsIgnoreCase("MAN HINH")) {
-					khVucMANHINH += 0.5;
-				}
-				if(sokv == soKVtrong){
-					dienTichConHienTai = dienTichBanDau;
-				}else{
-					dienTichConHienTai = dienTichBanDau - (khVucCPU + khVucCHUOT + khVucBANPHIM + khVucMANHINH);
-					
-				}
-			}
-		}
-
-		System.out.println("-----------------------------------------------------");
-		System.out.println("\n\n================= THONG TIN KHO HANG " + maKho + " =================");
-		System.out.printf("%-25s|%-20s|%-20s", "Dien tich Con Hien Tai", "Khu Vuc Hien Co", "Khu Vuc Trong");
-		System.out.println("\n-----------------------------------------------------------");
-		System.out.printf("%-25s|%-20s|%-20s", dienTichConHienTai, sokv, soKVtrong);
-		System.out.println("\n-------------------------------------------------------------");
-
+		
 	}
-
-	public static void NhapHang() {
-		System.out.println("Moi ban nhap ma khu vuc de luu tru ");
-		boolean flag = true;
-		String maKhuVuc = sc.nextLine();
-		KhuVuc khuVuc = new KhuVuc(maKhuVuc);
-		for (KhuVuc kv : listKhuVuc) {
-			if (kv.getMaKhuVuc().equalsIgnoreCase(khuVuc.getMaKhuVuc())) {
-				khuVuc.setTenKhuVuc(kv.getTenKhuVuc());
-				khuVuc.setDienTich(kv.getDienTich());
-				khuVuc.setMaKho(kv.getMaKho());
-				khuVuc.setMatHangLuuTru(kv.getMatHangLuuTru());
-				khuVuc.setSoLuong(kv.getSoLuong());
-				flag = true;
-
-				if (khuVuc.getMatHangLuuTru().equalsIgnoreCase("ban phim")) {
-					BanPhim bp = new BanPhim();
-					bp.NhapThongTinHangHoa();
-					bp.setMaKhuVuc(maKhuVuc);
-					khuVuc.setSoLuong(khuVuc.getSoLuong() + bp.getSoLuong());
-					listBanPhim.add(bp);
-					listKhuVuc.set(listKhuVuc.indexOf(kv), khuVuc);
-				} else if (khuVuc.getMatHangLuuTru().equalsIgnoreCase("cpu")) {
-					CPU cpu = new CPU();
-					cpu.NhapThongTinHangHoa();
-					cpu.setMaKhuVuc(maKhuVuc);
-					listCPU.add(cpu);
-					listKhuVuc.set(listKhuVuc.indexOf(kv), khuVuc);
-					khuVuc.setSoLuong(khuVuc.getSoLuong() + cpu.getSoLuong());
-				} else if (khuVuc.getMatHangLuuTru().equalsIgnoreCase("chuot")) {
-					Chuot Chuot = new Chuot();
-					Chuot.NhapThongTinHangHoa();
-					Chuot.setMaKhuVuc(maKhuVuc);
-					listChuot.add(Chuot);
-					listKhuVuc.set(listKhuVuc.indexOf(kv), khuVuc);
-					khuVuc.setSoLuong(khuVuc.getSoLuong() + Chuot.getSoLuong());
-				} else if (khuVuc.getMatHangLuuTru().equalsIgnoreCase("man hinh")) {
-					ManHinh manHinh = new ManHinh();
-					manHinh.NhapThongTinHangHoa();
-					manHinh.setMaKhuVuc(maKhuVuc);
-					listManHinh.add(manHinh);
-					khuVuc.setSoLuong(khuVuc.getSoLuong() + manHinh.getSoLuong());
-					listKhuVuc.set(listKhuVuc.indexOf(kv), khuVuc);
-				}
-
-			}
-		}
-
-		if (!flag) {
-			System.out.println("Ma khu vuc khong ton tai. ");
-		}
-
-	}
-
+	
+	
 	public static void XuatHang() {
 		
-		System.out.println("================ DANH SACH KHO HANG ================");
-		System.out.printf("%-10s|%-20s|%-10s|%-10s", "Ma Kho", "Ten Kho", "Dien Tich", "So Khu Vuc\n");
-		System.out.println("------------------------------------------------------");
-		for (KhoHang khoHang : listKhoHang) {
-			System.out.println(khoHang.XuatThongTinKhoHang());
-		}
-		System.out.println("------------------------------------------------------");
-	
+		HienThiDanhSachKhoHang();
+
+		System.out.println("--> Chon kho hang de them: ");
 		sc.nextLine();
-		System.out.println("\n============ KHO HANG CAN XUAT ===========");
-		System.out.println("Nhap ma kho: ");
 		String maKho = sc.nextLine();
+		int dem = 0;
+		boolean flag = false;
+		List<HoaDon> listHoaDon = new ArrayList<>();
+		for (KhoHang kh : listKhoHang) {
+			if (kh.getMaKho().equalsIgnoreCase(maKho)) {
+				flag = true;
+				if (kh.getKhuVucs().size() != 0) {
+					System.out.println("-- DANH SACH MAT HANG --");
+
+					for (KhuVuc khuvuc : kh.getKhuVucs()) {
+						dem++;
+						System.out.println(dem + " - " + khuvuc.getMatHangLuuTru());
+					}
+
+					System.out.println("--> Chon mat hang can xuat: ");
+
+					int luaChon = sc.nextInt();
+					int index = 0;
+					if (luaChon == 1) {
+						XuatHangTrongKhoTheoTruongHop(0,maKho,kh,listHoaDon);
+					} else if (luaChon == 2) {
+						XuatHangTrongKhoTheoTruongHop(1,maKho,kh,listHoaDon);
+					} else if (luaChon == 3) {
+						XuatHangTrongKhoTheoTruongHop(2,maKho,kh,listHoaDon);
+					} else if (luaChon == 4) {
+						XuatHangTrongKhoTheoTruongHop(3,maKho,kh,listHoaDon);
+					}
+				} else {
+					System.out.println("Trong kho " + maKho + " chua co mat hang nao !");
+				}
+
+			}
+		}
 		
-		System.out.println("\n\n======================= THONG TIN KHO HANG " + maKho + " =========================");
-		System.out.printf("%-10s|%-20s|%-10s|%-20s|%-10s", "Ma Khu Vuc", "Ten Khu Vuc", "Dien Tich", "Mat Hang",
-				"So Luong Hien Co");
-		System.out.println("\n-----------------------------------------------------------------------------------");
-
-		for (KhuVuc khuVuc : listKhuVuc) {
-			if (khuVuc.getMaKho().equalsIgnoreCase(maKho)) {
-				System.out.println(khuVuc.XuatThongTinKhuVuc());
-			}
+		if(!flag){
+			System.out.println("Ma kho " + maKho + " khong tin thay !");
 		}
-		System.out.println("-----------------------------------------------------------------------------------");
-
-		HoaDon hoadon = new HoaDon();
-		hoadon.NhapHoaDon();
-		hoadon.setMaKho(maKho);
-		listHoaDon.add(hoadon);
-		for (KhuVuc kh : listKhuVuc) {
-			if (kh.getMaKhuVuc().equalsIgnoreCase(hoadon.getMaKhuVuc())) {
-				kh.setSoLuong(kh.getSoLuong() - hoadon.getSoLuongXuat());
-				listKhuVuc.set(listKhuVuc.indexOf(kh), kh);
+	}
+	
+	public static void XuatHangTrongKhoTheoTruongHop(int index,String maKho, KhoHang kh, List<HoaDon> listHoaDon){
+		if (kh.getKhuVucs().get(index).getMatHangLuuTru().equalsIgnoreCase("BAN PHIM")) {
+			HoaDon hoaDon = new HoaDon();
+			hoaDon.NhapHoaDon();
+			hoaDon.setMaKho(maKho);
+			hoaDon.setMaKhuVuc(kh.getKhuVucs().get(index).getMaKhuVuc());
+			hoaDon.setTenHang(kh.getKhuVucs().get(index).getMatHangLuuTru());
+			
+			int soLuongHangSauKhiXuat = kh.getKhuVucs().get(index).getSoLuong() - hoaDon.getSoLuongXuat();
+			
+			if(soLuongHangSauKhiXuat < 0){
+				System.out.println("- So luong hang trong khong du");
+				System.out.println("- So luong hang trong kho con: " + kh.getKhuVucs().get(index).getSoLuong());
+			}else if(soLuongHangSauKhiXuat > 0){
+				System.out.println("- Xuat hang thanh cong");
+				System.out.println("- So luong hang trong kho con lai sau khi xuat: " + soLuongHangSauKhiXuat);
+				listHoaDon.add(hoaDon);
+				kh.setHoaDons(listHoaDon);
+				kh.getKhuVucs().get(index).setSoLuong(soLuongHangSauKhiXuat);
+				listKhoHang.set(listKhoHang.indexOf(kh), kh);
+			}else {
+				System.out.println("- Xuat hang thanh cong");
+				System.out.println("- So luong hang trong kho con lai sau khi xuat: 0 ");
+				listHoaDon.add(hoaDon);
+				kh.setHoaDons(listHoaDon);
+				kh.getKhuVucs().get(index).setSoLuong(0);
+				listKhoHang.set(listKhoHang.indexOf(kh), kh);
 			}
+				
+		}else if (kh.getKhuVucs().get(index).getMatHangLuuTru().equalsIgnoreCase("CHUOT")) {
+			HoaDon hoaDon = new HoaDon();
+			hoaDon.NhapHoaDon();
+			hoaDon.setMaKho(maKho);
+			hoaDon.setMaKhuVuc(kh.getKhuVucs().get(index).getMaKhuVuc());
+			hoaDon.setTenHang(kh.getKhuVucs().get(index).getMatHangLuuTru());
+			
+			int soLuongHangSauKhiXuat = kh.getKhuVucs().get(index).getSoLuong() - hoaDon.getSoLuongXuat();
+			
+			if(soLuongHangSauKhiXuat < 0){
+				System.out.println("- So luong hang trong khong du");
+				System.out.println("- So luong hang trong kho con: " + kh.getKhuVucs().get(index).getSoLuong());
+			}else if(soLuongHangSauKhiXuat > 0){
+				System.out.println("- Xuat hang thanh cong");
+				System.out.println("- So luong hang trong kho con lai sau khi xuat: " + soLuongHangSauKhiXuat);
+				listHoaDon.add(hoaDon);
+				kh.setHoaDons(listHoaDon);
+				kh.getKhuVucs().get(index).setSoLuong(soLuongHangSauKhiXuat);
+				listKhoHang.set(listKhoHang.indexOf(kh), kh);
+			}else {
+				System.out.println("- Xuat hang thanh cong");
+				System.out.println("- So luong hang trong kho con lai sau khi xuat: 0 ");
+				listHoaDon.add(hoaDon);
+				kh.setHoaDons(listHoaDon);
+				kh.getKhuVucs().get(index).setSoLuong(0);
+				listKhoHang.set(listKhoHang.indexOf(kh), kh);
+			}
+		}else if (kh.getKhuVucs().get(index).getMatHangLuuTru().equalsIgnoreCase("MAN HINH")) {
+			HoaDon hoaDon = new HoaDon();
+			hoaDon.NhapHoaDon();
+			hoaDon.setMaKho(maKho);
+			hoaDon.setMaKhuVuc(kh.getKhuVucs().get(index).getMaKhuVuc());
+			hoaDon.setTenHang(kh.getKhuVucs().get(index).getMatHangLuuTru());
+			
+			int soLuongHangSauKhiXuat = kh.getKhuVucs().get(index).getSoLuong() - hoaDon.getSoLuongXuat();
+			
+			if(soLuongHangSauKhiXuat < 0){
+				System.out.println("- So luong hang trong khong du");
+				System.out.println("- So luong hang trong kho con: " + kh.getKhuVucs().get(index).getSoLuong());
+			}else if(soLuongHangSauKhiXuat > 0){
+				System.out.println("- Xuat hang thanh cong");
+				System.out.println("- So luong hang trong kho con lai sau khi xuat: " + soLuongHangSauKhiXuat);
+				listHoaDon.add(hoaDon);
+				kh.setHoaDons(listHoaDon);
+				kh.getKhuVucs().get(index).setSoLuong(soLuongHangSauKhiXuat);
+				listKhoHang.set(listKhoHang.indexOf(kh), kh);
+			}else {
+				System.out.println("- Xuat hang thanh cong");
+				System.out.println("- So luong hang trong kho con lai sau khi xuat: 0 ");
+				listHoaDon.add(hoaDon);
+				kh.setHoaDons(listHoaDon);
+				kh.getKhuVucs().get(index).setSoLuong(0);
+				listKhoHang.set(listKhoHang.indexOf(kh), kh);
+			}
+		}else if (kh.getKhuVucs().get(index).getMatHangLuuTru().equalsIgnoreCase("CPU")) {
+				HoaDon hoaDon = new HoaDon();
+				hoaDon.NhapHoaDon();
+				hoaDon.setMaKho(maKho);
+				hoaDon.setMaKhuVuc(kh.getKhuVucs().get(index).getMaKhuVuc());
+				hoaDon.setTenHang(kh.getKhuVucs().get(index).getMatHangLuuTru());
+				
+				int soLuongHangSauKhiXuat = kh.getKhuVucs().get(index).getSoLuong() - hoaDon.getSoLuongXuat();
+				
+				if(soLuongHangSauKhiXuat < 0){
+					System.out.println("- So luong hang trong khong du");
+					System.out.println("- So luong hang trong kho con: " + kh.getKhuVucs().get(index).getSoLuong());
+				}else if(soLuongHangSauKhiXuat > 0){
+					System.out.println("- Xuat hang thanh cong");
+					System.out.println("- So luong hang trong kho con lai sau khi xuat: " + soLuongHangSauKhiXuat);
+					listHoaDon.add(hoaDon);
+					kh.setHoaDons(listHoaDon);
+					kh.getKhuVucs().get(index).setSoLuong(soLuongHangSauKhiXuat);
+					listKhoHang.set(listKhoHang.indexOf(kh), kh);
+				}else {
+					System.out.println("- Xuat hang thanh cong");
+					System.out.println("- So luong hang trong kho con lai sau khi xuat: 0 ");
+					listHoaDon.add(hoaDon);
+					kh.setHoaDons(listHoaDon);
+					kh.getKhuVucs().get(index).setSoLuong(0);
+					listKhoHang.set(listKhoHang.indexOf(kh), kh);
+				}
 		}
-
 	}
 
-	public static void ThongTinSoLuongHangTrongKho() {
-
+	public static void QuanLyTonKho() {
 		HienThiDanhSachKhoHang();
-		sc.nextLine();
+
 		System.out.println("\nNhap ma kho de xem thong tin: ");
+		sc.nextLine();
 		String maKho = sc.nextLine();
 
 		System.out.println("=========== Hoa Don Xuat Hang TRONG KHO: " + maKho + " ============");
-		System.out.printf("%-10s|%-10s|%-10s|%-10s|%-10s", "maHoaDon", "maKho", "maKhuVuc", "ngayXuat",
+		System.out.printf("%-10s|%-10s|%-10s|%-10s|%-10s", "maHoaDon", "maKho", "maKhuVuc", "TenHang",
 				"soLuongXuat");
 		System.out.println();
-		for (HoaDon h : listHoaDon) {
-			if (h.getMaKho().equalsIgnoreCase(maKho)) {
-				System.out.println(h.XuatHoaDon());
+		
+		for (KhoHang kh : listKhoHang) {
+			if (kh.getMaKho().equalsIgnoreCase(maKho)) {
+				for(HoaDon hoadon : kh.getHoaDons()){
+					System.out.println(hoadon.XuatHoaDon());
+				}
 			}
 		}
 		System.out.println("----------------------------------------------------------------");
@@ -310,15 +464,15 @@ public class Main {
 				"So Luong Hien Co");
 		System.out.println("\n-----------------------------------------------------------------------------------");
 
-		for (KhuVuc khuVuc : listKhuVuc) {
-			if (khuVuc.getMaKho().equalsIgnoreCase(maKho)) {
-				System.out.println(khuVuc.XuatThongTinKhuVuc());
+		for (KhoHang kh : listKhoHang) {
+			if (kh.getMaKho().equalsIgnoreCase(maKho)) {
+				for(KhuVuc khuvuc : kh.getKhuVucs()){
+					System.out.println(khuvuc.XuatThongTinKhuVuc());
+				}
 			}
 		}
 		System.out.println("-----------------------------------------------------------------------------------");
-
+		
 	}
 
-
-	
 }

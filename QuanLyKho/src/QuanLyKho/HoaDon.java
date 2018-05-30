@@ -6,9 +6,8 @@ public class HoaDon {
 
 	private String maHoaDon;
 	private String maKho, maKhuVuc;
-	private String ngayXuat;
+	private String tenHang;
 	private int soLuongXuat;
-	
 	
 	public void NhapHoaDon(){
 		Scanner sc = new Scanner(System.in);
@@ -16,20 +15,22 @@ public class HoaDon {
 		System.out.println("Nhap ma hoa don: ");
 		maHoaDon = sc.nextLine();
 		
-		System.out.println("Nhap ma Khu Vuc: ");
-		maKhuVuc = sc.nextLine();
-		
 		System.out.println("Nhap so Luong Xuat: ");
 		soLuongXuat = sc.nextInt();
 		sc.nextLine();
-		System.out.println("Nhap ngay Xuat: ");
-		ngayXuat =  sc.nextLine();
-		
 	}
 	
+	public String getTenHang() {
+		return tenHang;
+	}
+
+	public void setTenHang(String tenHang) {
+		this.tenHang = tenHang;
+	}
+
 	public String XuatHoaDon(){
 		return String.format("%-10s|%-10s|%-10s|%-10s|%-10s", 
-				maHoaDon,maKho,maKhuVuc,ngayXuat,soLuongXuat);
+				maHoaDon,maKho,maKhuVuc,tenHang,soLuongXuat);
 	}
 
 	
@@ -51,24 +52,19 @@ public class HoaDon {
 	public void setMaKhuVuc(String maKhuVuc) {
 		this.maKhuVuc = maKhuVuc;
 	}
-	public String getNgayXuat() {
-		return ngayXuat;
-	}
-	public void setNgayXuat(String ngayXuat) {
-		this.ngayXuat = ngayXuat;
-	}
+	
 	public int getSoLuongXuat() {
 		return soLuongXuat;
 	}
 	public void setSoLuongXuat(int soLuongXuat) {
 		this.soLuongXuat = soLuongXuat;
 	}
-	public HoaDon(String maHoaDon, String maKho, String maKhuVuc, String ngayXuat, int soLuongXuat) {
+	public HoaDon(String maHoaDon, String maKho, String maKhuVuc, String tenHang, int soLuongXuat) {
 		super();
 		this.maHoaDon = maHoaDon;
 		this.maKho = maKho;
 		this.maKhuVuc = maKhuVuc;
-		this.ngayXuat = ngayXuat;
+		this.tenHang = tenHang;
 		this.soLuongXuat = soLuongXuat;
 	}
 	public HoaDon() {
